@@ -2,6 +2,8 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+# SQLite database lives outside /app, which VS bind-mounts from the host in fast mode
+RUN mkdir -p /data && chown $APP_UID /data
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
