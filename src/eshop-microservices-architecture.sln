@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.8.12021.73 stable
+VisualStudioVersion = 18.8.12021.73
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{B1DD1387-8B22-41E3-8D48-F96A93CCF20E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.API", "Services\Basket\Basket.API\Basket.API.csproj", "{CED83DB4-424A-44E7-BB7A-E57537D4099C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discount", "Discount", "{71459003-0985-4240-AF42-33232108304B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Grpc", "Services\Discount\Discount.Grpc\Discount.Grpc.csproj", "{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,10 @@ Global
 		{CED83DB4-424A-44E7-BB7A-E57537D4099C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CED83DB4-424A-44E7-BB7A-E57537D4099C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CED83DB4-424A-44E7-BB7A-E57537D4099C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,8 @@ Global
 		{2993477D-8866-4F7B-92F5-2A1D77ACBF49} = {06A1864D-C192-42B1-971C-1AA427AF1AFC}
 		{B1DD1387-8B22-41E3-8D48-F96A93CCF20E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{CED83DB4-424A-44E7-BB7A-E57537D4099C} = {B1DD1387-8B22-41E3-8D48-F96A93CCF20E}
+		{71459003-0985-4240-AF42-33232108304B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{94D71EAD-8CED-4A9A-9CFC-ADB2746087FC} = {71459003-0985-4240-AF42-33232108304B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA1DB543-7635-497B-9DD1-C0F4E0440510}
