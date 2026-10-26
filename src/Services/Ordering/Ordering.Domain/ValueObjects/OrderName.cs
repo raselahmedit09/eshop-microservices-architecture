@@ -4,7 +4,7 @@ namespace Ordering.Domain.ValueObjects
 {
     public record OrderName
     {
-        private const int DefaultLength = 4;
+        private const int DefaultLength = 3;
         public string Value { get; }
 
         private OrderName(string value)
