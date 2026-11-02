@@ -2,8 +2,9 @@
 {
     public record IntegrationEvent
     {
-        public Guid Id => Guid.NewGuid();
-        public DateTime OccurredOn => DateTime.Now;
+        // Assigned once when the event is created; init lets the consumer deserialize the publisher's values.
+        public Guid Id { get; init; } = Guid.NewGuid();
+        public DateTime OccurredOn { get; init; } = DateTime.Now;
         public string EventType => GetType().AssemblyQualifiedName;
     }
 }

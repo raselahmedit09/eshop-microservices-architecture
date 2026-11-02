@@ -17,11 +17,12 @@ namespace Basket.API.Basket.GetBasket
 
                 return Results.Ok(respose);
             })
-        .WithName("GetProductById")
+        .WithName("GetBasket")
         .Produces<GetBasketResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
-        .WithSummary("Get Product By Id")
-        .WithDescription("Get Product By Id");
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .WithSummary("Get Basket")
+        .WithDescription("Get Basket");
         }
     }
 }

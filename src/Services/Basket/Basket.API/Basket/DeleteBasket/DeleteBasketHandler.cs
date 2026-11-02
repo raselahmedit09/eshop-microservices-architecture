@@ -19,7 +19,7 @@ namespace Basket.API.Basket.DeleteBasket
     {
         public async Task<DeleteBasketResult> Handle(DeleteBasketCommand command, CancellationToken cancellationToken)
         {
-            // TODO: delete basket from database and cache       
+            // CachedBasketRepository removes it from both the database and Redis
             await repository.DeleteBasket(command.UserName, cancellationToken);
 
             return new DeleteBasketResult(true);

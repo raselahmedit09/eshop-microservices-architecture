@@ -1,10 +1,16 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Basket.API.Data
 {
-    public class CachedBasketRepository(IBasketRepository basketRepository, IDistributedCache distributedCache) : IBasketRepository
+    public class CachedBasketRepository(IBasketRepository basketRepository, IDistributedCache distributedCache, IOptions<CacheSettings> cacheSettings) : IBasketRepository
     {
+        private readonly DistributedCacheEntryOptions _cacheOptions = new()
+        {
+            SlidingExpiration = TimeSpan.FromMinutes(cacheSettings.Value.SlidingExpirationMinutes)
+        };
+
         public async Task<ShoppingCart> GetBasket(string userName, CancellationToken cancellationToken = default)
         {
             var cachedBasket = await distributedCache.GetStringAsync(userName, cancellationToken);
@@ -12,7 +18,7 @@ namespace Basket.API.Data
                 return JsonSerializer.Deserialize<ShoppingCart>(cachedBasket)!;
 
             var basket = await basketRepository.GetBasket(userName, cancellationToken);
-            await distributedCache.SetStringAsync(userName, JsonSerializer.Serialize(basket), cancellationToken);
+            await distributedCache.SetStringAsync(userName, JsonSerializer.Serialize(basket), _cacheOptions, cancellationToken);
             return basket;
         }
 
@@ -20,7 +26,7 @@ namespace Basket.API.Data
         {
             await basketRepository.StoreBasket(basket, cancellationToken);
 
-            await distributedCache.SetStringAsync(basket.UserName, JsonSerializer.Serialize(basket), cancellationToken);
+            await distributedCache.SetStringAsync(basket.UserName, JsonSerializer.Serialize(basket), _cacheOptions, cancellationToken);
 
             return basket;
         }

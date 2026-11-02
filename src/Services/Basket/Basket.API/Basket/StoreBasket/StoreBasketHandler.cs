@@ -32,7 +32,9 @@ namespace Basket.API.Basket.StoreBasket
             foreach (var item in cart.Items)
             {
                 var coupon = await discountProtoServiceClient.GetDiscountAsync(new GetDiscountRequest { ProductName = item.ProductName }, cancellationToken: cancellationToken);
-                item.Price -= coupon.Amount;
+                // Overwrite rather than subtract from Price, so storing the same basket again
+                // does not apply the discount twice. A discount never makes the price negative.
+                item.Discount = Math.Min(coupon.Amount, item.Price);
             }
         }
 

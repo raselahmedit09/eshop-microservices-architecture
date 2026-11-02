@@ -5,14 +5,15 @@
         public string? CardName { get; } = default!;
         public string CardNumber { get; } = default!;
         public string Expiration { get; } = default!;
-        public string CVV { get; } = default!;
+        // Optional: orders created from a basket checkout never receive the CVV
+        public string? CVV { get; }
         public int PaymentMethod { get; } = default!;
 
         protected Payment()
         {
         }
 
-        private Payment(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
+        private Payment(string cardName, string cardNumber, string expiration, string? cvv, int paymentMethod)
         {
             CardName = cardName;
             CardNumber = cardNumber;
@@ -21,13 +22,13 @@
             PaymentMethod = paymentMethod;
         }
 
-        public static Payment Of(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
+        public static Payment Of(string cardName, string cardNumber, string expiration, string? cvv, int paymentMethod)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(cardName);
             ArgumentException.ThrowIfNullOrWhiteSpace(cardNumber);
             ArgumentException.ThrowIfNullOrWhiteSpace(expiration);
-            ArgumentException.ThrowIfNullOrWhiteSpace(cvv);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(cvv.Length, 3);
+            if (cvv is not null)
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(cvv.Length, 3);
             return new Payment(cardName, cardNumber, expiration, cvv, paymentMethod);
         }
     }

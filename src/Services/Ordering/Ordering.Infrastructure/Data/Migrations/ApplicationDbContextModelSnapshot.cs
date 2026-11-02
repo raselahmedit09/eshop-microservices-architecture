@@ -18,7 +18,7 @@ namespace Ordering.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -142,7 +142,6 @@ namespace Ordering.Infrastructure.Data.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("CVV")
-                                .IsRequired()
                                 .HasMaxLength(3)
                                 .HasColumnType("nvarchar(3)");
 

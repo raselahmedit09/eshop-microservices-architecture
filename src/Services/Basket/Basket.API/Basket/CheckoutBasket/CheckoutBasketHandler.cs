@@ -26,24 +26,33 @@ namespace Basket.API.Basket.CheckoutBasket
         public async Task<CheckoutBasketResult> Handle(CheckoutBasketCommand command, CancellationToken cancellationToken)
         {
             // get existing basket with total price
-            // Set totalprice on basketcheckout event message
+            // Set totalprice and items on basketcheckout event message
             // send basket checkout event to rabbitmq using masstransit
             // delete the basket
 
+            // Throws BasketNotFoundException (404) when the user has no basket
             var basket = await repository.GetBasket(command.BasketCheckoutDto.UserName, cancellationToken);
-            if (basket == null)
-            {
-                return new CheckoutBasketResult(false);
-            }
 
             var eventMessage = command.BasketCheckoutDto.Adapt<BasketCheckoutEvent>();
             eventMessage.TotalPrice = basket.TotalPrice;
+            eventMessage.Items = basket.Items
+                .Select(i => new BasketCheckoutItem(i.ProductId, i.ProductName, i.Quantity, i.DiscountedPrice))
+                .ToList();
+            // Only the last 4 digits leave this service; the CVV is never forwarded
+            eventMessage.CardNumber = MaskCardNumber(command.BasketCheckoutDto.CardNumber);
 
             await publishEndpoint.Publish(eventMessage, cancellationToken);
 
             await repository.DeleteBasket(command.BasketCheckoutDto.UserName, cancellationToken);
 
             return new CheckoutBasketResult(true);
+        }
+
+        private static string MaskCardNumber(string cardNumber)
+        {
+            var digits = new string(cardNumber.Where(char.IsDigit).ToArray());
+            var last4 = digits.Length >= 4 ? digits[^4..] : digits;
+            return $"**** **** **** {last4}";
         }
     }
 }

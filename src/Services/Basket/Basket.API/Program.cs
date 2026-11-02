@@ -56,6 +56,9 @@ builder.Services.AddStackExchangeRedisCache(options =>
     //options.InstanceName = "Basket";
 });
 
+// Cache expiry for baskets, used by CachedBasketRepository
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
+
 //gRPC services
 
 // Registers a typed gRPC client for the Discount service, generated from discount.proto.

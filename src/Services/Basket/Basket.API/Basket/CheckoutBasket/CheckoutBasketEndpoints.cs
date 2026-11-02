@@ -21,7 +21,8 @@ namespace Basket.API.Basket.CheckoutBasket
                 return Results.Ok(response);
             })
         .WithName("CheckoutBasket")
-        .Produces<CheckoutBasketResponse>(StatusCodes.Status201Created)
+        .Produces<CheckoutBasketResponse>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Checkout Basket")
         .WithDescription("Checkout Basket");
