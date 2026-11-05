@@ -7,7 +7,7 @@ namespace BuildingBlocks.Messaging.MassTransit
 {
     public static class Extentions
     {
-        public static IServiceCollection AddMessageBroker(this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null)
+        public static IServiceCollection AddMessageBroker(this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null, Action<IBusRegistrationConfigurator>? configure = null)
         {
             services.AddMassTransit(config =>
             {
@@ -15,6 +15,9 @@ namespace BuildingBlocks.Messaging.MassTransit
 
                 if (assembly != null)
                     config.AddConsumers(assembly);
+
+                // Lets a service add its own setup, e.g. a transactional outbox for its DbContext
+                configure?.Invoke(config);
 
                 config.UsingRabbitMq((context, configurator) =>
                 {

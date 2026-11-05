@@ -23,6 +23,7 @@ namespace Basket.API.Basket.StoreBasket
         {
             await DeductDiscount(command.Cart, cancellationToken);
 
+            command.Cart.CheckoutId = Guid.NewGuid();
             await repository.StoreBasket(command.Cart, cancellationToken);
 
             return new StoreBasketResult(command.Cart.UserName);

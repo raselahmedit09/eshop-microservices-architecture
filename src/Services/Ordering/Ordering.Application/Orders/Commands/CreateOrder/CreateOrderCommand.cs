@@ -2,7 +2,11 @@
 
 namespace Ordering.Application.Orders.Commands.CreateOrder
 {
-    public record CreateOrderCommand(OrderDto Order) : ICommand<CreateOrderResult>;
+    // UseOrderIdFromDto keeps Order.Id instead of generating one, so a consumer can create the order idempotently
+    public record CreateOrderCommand(OrderDto Order) : ICommand<CreateOrderResult>
+    {
+        public bool UseOrderIdFromDto { get; init; }
+    }
 
     public record CreateOrderResult(Guid Id);
 

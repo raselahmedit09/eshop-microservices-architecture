@@ -14,7 +14,8 @@ namespace Ordering.Application.Orders.Commands.CreateOrder
             //save to database
             //return result 
 
-            var order = CreateNewOrder(command.Order);
+            var orderId = command.UseOrderIdFromDto ? command.Order.Id : Guid.NewGuid();
+            var order = CreateNewOrder(orderId, command.Order);
 
             dbContext.Orders.Add(order);
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -22,13 +23,13 @@ namespace Ordering.Application.Orders.Commands.CreateOrder
             return new CreateOrderResult(order.Id.Value);
         }
 
-        private Order CreateNewOrder(OrderDto orderDto)
+        private Order CreateNewOrder(Guid orderId, OrderDto orderDto)
         {
             var shippingAddress = Address.Of(orderDto.ShippingAddress.FirstName, orderDto.ShippingAddress.LastName, orderDto.ShippingAddress.EmailAddress, orderDto.ShippingAddress.AddressLine, orderDto.ShippingAddress.Country, orderDto.ShippingAddress.State, orderDto.ShippingAddress.ZipCode);
             var billingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.AddressLine, orderDto.BillingAddress.Country, orderDto.BillingAddress.State, orderDto.BillingAddress.ZipCode);
 
             var newOrder = Order.Create(
-                    id: OrderId.Of(Guid.NewGuid()),
+                    id: OrderId.Of(orderId),
                     customerId: CustomerId.Of(orderDto.CustomerId),
                     orderName: OrderName.Of(orderDto.OrderName),
                     shippingAddress: shippingAddress,

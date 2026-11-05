@@ -33,7 +33,16 @@ namespace Basket.API.Basket.CheckoutBasket
             // Throws BasketNotFoundException (404) when the user has no basket
             var basket = await repository.GetBasket(command.BasketCheckoutDto.UserName, cancellationToken);
 
-            var eventMessage = command.BasketCheckoutDto.Adapt<BasketCheckoutEvent>();
+            // Baskets stored before CheckoutId existed get one now, persisted so a retry reuses it
+            if (basket.CheckoutId == Guid.Empty)
+            {
+                basket.CheckoutId = Guid.NewGuid();
+                await repository.StoreBasket(basket, cancellationToken);
+            }
+
+            // Publish and DeleteBasket are not atomic. If the delete fails, the next checkout publishes
+            // the same event Id again and Ordering ignores it, so no duplicate order is created.
+            var eventMessage = command.BasketCheckoutDto.Adapt<BasketCheckoutEvent>() with { Id = basket.CheckoutId };
             eventMessage.TotalPrice = basket.TotalPrice;
             eventMessage.Items = basket.Items
                 .Select(i => new BasketCheckoutItem(i.ProductId, i.ProductName, i.Quantity, i.DiscountedPrice))

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Ordering.Application.Data;
 using Ordering.Domain.Models;
 using System.Reflection;
@@ -18,6 +19,12 @@ namespace Ordering.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // MassTransit transactional outbox tables
+            builder.AddInboxStateEntity();
+            builder.AddOutboxMessageEntity();
+            builder.AddOutboxStateEntity();
+
             base.OnModelCreating(builder);
         }
 

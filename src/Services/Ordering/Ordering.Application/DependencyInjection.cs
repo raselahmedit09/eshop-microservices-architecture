@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Behaviors;
-using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
@@ -19,7 +18,7 @@ namespace Ordering.Application
             });
 
             services.AddFeatureManagement();
-            services.AddMessageBroker(configuration, Assembly.GetExecutingAssembly());
+            // The message broker is registered in Infrastructure, because its outbox needs ApplicationDbContext
 
             return services;
         }
