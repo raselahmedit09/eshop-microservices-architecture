@@ -5,6 +5,7 @@ An e-commerce backend built as .NET 10 microservices. Each service owns its own 
 ## Architecture
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart LR
     client([Client])
 
@@ -99,6 +100,7 @@ sequenceDiagram
 ## Basket caching
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart TD
     subgraph read["Read"]
         get["GetBasket"] --> hit{"In Redis?"}
@@ -123,11 +125,12 @@ flowchart TD
 ## Ordering: Clean Architecture
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart TB
-    api["<b>Ordering.API</b><br/>Carter endpoints<br/>Health checks"]
-    app["<b>Ordering.Application</b><br/>Commands and queries<br/>DTOs<br/>Event handlers"]
-    infra["<b>Ordering.Infrastructure</b><br/>EF Core DbContext<br/>Migrations, interceptors<br/>MassTransit outbox"]
-    domain["<b>Ordering.Domain</b><br/>Order aggregate<br/>Value objects<br/>Domain events"]
+    api["Ordering.API<br/>Carter endpoints<br/>Health checks"]
+    app["Ordering.Application<br/>Commands and queries<br/>DTOs<br/>Event handlers"]
+    infra["Ordering.Infrastructure<br/>EF Core DbContext<br/>Migrations, interceptors<br/>MassTransit outbox"]
+    domain["Ordering.Domain<br/>Order aggregate<br/>Value objects<br/>Domain events"]
 
     api --> app
     api --> infra
