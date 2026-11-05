@@ -100,12 +100,20 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    get[GetBasket] --> hit{In Redis?}
-    hit -->|yes| ret[Return cached basket]
-    hit -->|no| pg[Read from PostgreSQL] --> set[Store in Redis] --> ret
+    subgraph read["Read"]
+        get["GetBasket"] --> hit{"In Redis?"}
+        hit -->|yes| ret["Return<br/>cached basket"]
+        hit -->|no| pg["Read from<br/>PostgreSQL"]
+        pg --> put["Store<br/>in Redis"]
+        put --> ret
+    end
 
-    store[StoreBasket] --> pgw[Write to PostgreSQL] --> rm[Remove from Redis]
-    del[DeleteBasket] --> pgd[Delete from PostgreSQL] --> rm
+    subgraph write["Write"]
+        store["StoreBasket"] --> pgw["Write to<br/>PostgreSQL"]
+        del["DeleteBasket"] --> pgd["Delete from<br/>PostgreSQL"]
+        pgw --> rm["Remove<br/>from Redis"]
+        pgd --> rm
+    end
 ```
 
 - Keys are `basket:{userName}`.
@@ -116,10 +124,10 @@ flowchart TD
 
 ```mermaid
 flowchart TB
-    api[Ordering.API<br/>Carter endpoints, health checks]
-    app[Ordering.Application<br/>Commands, queries, DTOs, event handlers]
-    infra[Ordering.Infrastructure<br/>EF Core DbContext, migrations, interceptors, MassTransit outbox]
-    domain[Ordering.Domain<br/>Order aggregate, value objects, domain events]
+    api["<b>Ordering.API</b><br/>Carter endpoints<br/>Health checks"]
+    app["<b>Ordering.Application</b><br/>Commands and queries<br/>DTOs<br/>Event handlers"]
+    infra["<b>Ordering.Infrastructure</b><br/>EF Core DbContext<br/>Migrations, interceptors<br/>MassTransit outbox"]
+    domain["<b>Ordering.Domain</b><br/>Order aggregate<br/>Value objects<br/>Domain events"]
 
     api --> app
     api --> infra
